@@ -1,6 +1,4 @@
 <?php
-include("script/UserGateway.php");
-
 define('SESSION_ID',session_id());
 
 function logout() {
@@ -9,11 +7,13 @@ function logout() {
 }
 
 function login($login,$password){
-    $ug = new UserGatewayClass();
-    $USER = $ug->findUserByLoginAndName($login,$password);
+    $result = mysql_query("SELECT * FROM  `users` WHERE login =  '$login' AND PASSWORD =  '$password'")
+    or die(mysql_error());
+    $USER = mysql_fetch_array($result,1);
     if(!empty($USER)) {
         $_SESSION = array_merge($_SESSION,$USER);
-        $ug->updateSessionId(SESSION_ID,$USER['user_id']);
+        mysql_query("UPDATE `users` SET session_id='".SESSION_ID."' WHERE user_id='".$USER['user_id']."';")
+        or die(mysql_error());
         return true;
     }
     else {
@@ -22,8 +22,8 @@ function login($login,$password){
 }
 
 function check_user($user_id) {
-    $ug = new UserGatewayClass();
-    $session_id =$ug->findUserById($user_id);
+    $result = mysql_query("SELECT session_id FROM `users` WHERE user_id = '$user_id';") or die(mysql_error());
+    $session_id = mysql_result($result,0);
     return $session_id==SESSION_ID ? true : false;
 }
 
