@@ -5,7 +5,7 @@
  * Date: 28.03.2015
  * Time: 0:32
  */
-
+//
 class UserGatewayClass {
 
     public function updateSessionId($session_id,$user_id){
