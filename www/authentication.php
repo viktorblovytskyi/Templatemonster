@@ -1,5 +1,5 @@
 <?php
-include("script/UserGateway.php");
+include("scripts/Tools.php");
 
 define('SESSION_ID',session_id());
 
@@ -9,21 +9,27 @@ function logout() {
 }
 
 function login($login,$password){
-    $ug = new UserGatewayClass();
-    $USER = $ug->findUserByLoginAndName($login,$password);
+    $gateway = Tools::factory('UserGateway');
+    $tools = new Tools();
+    if(!$tools->check_user_login($login)){
+        return false;
+    }
+    if(!$tools->check_user_password($password)){
+        return false;
+    }
+    $USER = $gateway->findUserByLoginAndName($login,$password);
     if(!empty($USER)) {
         $_SESSION = array_merge($_SESSION,$USER);
-        $ug->updateSessionId(SESSION_ID,$USER['user_id']);
+        $gateway->updateSessionId(SESSION_ID,$USER['user_id']);
         return true;
-    }
-    else {
+    }else{
         return false;
     }
 }
 
 function check_user($user_id) {
-    $ug = new UserGatewayClass();
-    $session_id =$ug->findUserById($user_id);
+    $gateway = Tools::factory('UserGateway');
+    $session_id =$gateway->findUserById($user_id);
     return $session_id==SESSION_ID ? true : false;
 }
 
@@ -49,8 +55,7 @@ if (isset($_POST['login'])) {
     if(login($user,$pass)) {
         header('Refresh: 3');
         die('Вы успешно авторизировались!');
-    }
-    else {
+    }else {
         header('Refresh: 3;');
         die('Пароль неправильный!');
     }
@@ -60,4 +65,3 @@ if (isset($_POST['login'])) {
 if(isset($_GET['logout'])) {
     logout();
 }
-?>
