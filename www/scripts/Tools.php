@@ -26,8 +26,6 @@ class Tools {
     public static function factory($type){
         if(include_once'scripts/'.$type.'.php'){//**************
             return new $type;
-        }elseif(include_once $type.'.php'){
-            return new $type;
         }else{
             throw new Exception('Script not found.');
         }

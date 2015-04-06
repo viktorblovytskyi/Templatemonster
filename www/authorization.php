@@ -53,7 +53,7 @@ if (isset($_POST['login'])) {
     $user = mysql_real_escape_string($_POST['user']);
     $pass = mysql_real_escape_string($_POST['pass']);
     if(login($user,$pass)) {
-        header('Refresh: 3');
+        header('Refresh: 1');
         die('Вы успешно авторизировались!');
     }else {
         header('Refresh: 3;');

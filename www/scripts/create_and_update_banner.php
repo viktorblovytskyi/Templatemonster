@@ -6,7 +6,7 @@ session_start();
  * Date: 05.04.2015
  * Time: 21:31
  */
-include("scripts/Tools.php");
+include("Tools.php");
 if(USER_LOGGED) {
 ?>
     <table>
@@ -48,6 +48,8 @@ if(USER_LOGGED) {
     </form>
     </table>
 <?php
+
+
 }else{
     sign_in();
 }

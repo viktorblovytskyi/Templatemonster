@@ -6,7 +6,7 @@ session_start();
  * Date: 05.04.2015
  * Time: 21:00
  */
-include('scripts/Tools.php');
+//include('scripts/Tools.php');
 class Banner {
 
     function create_banner(){
@@ -24,7 +24,7 @@ class Banner {
         }
         $tool->write_in_file($_POST['banner_name'],$_POST['content']);
         $gateway->insert($_SESSION['user_id'],$_POST['banner_name'],$link,$status,$_POST['width'],$_POST['height'],$_POST['dateofstart'],$_POST['dateofend']);//***************************************
-        header('Refresh: 3');
+        header('Location: index.php ');
         die('Banner created successfully!');
     }
     function  update_banner($banner_id){
@@ -54,7 +54,4 @@ class Banner {
     }
 
 }
-
-$banner = new Banner();
-$banner->create_banner();
 
