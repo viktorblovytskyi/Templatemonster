@@ -1,30 +1,15 @@
 <?php
-    session_start();
-
-    include('authentication.php');
-
-    if(USER_LOGGED) {
+session_start();
+include('authorization.php');
+include('Banner.php');
+if(USER_LOGGED) {
     if(!check_user($user_id)) logout();
-    ?>
-    <h1>Здравствуйте, <?php echo $login; ?>!</h1>
-    <h2>Ваш ID: <?php echo $user_id; ?>.</h2>
-    <h4><a href="?logout">Выход</a></h4>
-<?php
+    echo"<a href='create_and_update_banner.php'>Create banner</a> ";
+    echo"<a href='?logout'>Выход</a>";
+    $banners = new Banner();
+    $banners ->show_user_banners($user_id);
+
 }
-else { ?>
-    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <table>
-            <tr>
-                <td>Имя:</td><td><input type="text" name="user"></td>
-            </tr>
-            <tr>
-                <td>Пароль:</td><td><input type="password" name="pass"></td>
-            </tr>
-            <tr>
-                <td colspan="2"><input type="submit" name="login" value="Войти"></td>
-            </tr>
-        </table>
-    </form>
-<?php
+else {
+    sign_in();
 }
-?>

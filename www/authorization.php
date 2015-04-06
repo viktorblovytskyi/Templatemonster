@@ -17,7 +17,7 @@ function login($login,$password){
     if(!$tools->check_user_password($password)){
         return false;
     }
-    $USER = $gateway->findUserByLoginAndName($login,$password);
+    $USER = $gateway->findUserByLoginAndPassword($login,$password);
     if(!empty($USER)) {
         $_SESSION = array_merge($_SESSION,$USER);
         $gateway->updateSessionId(SESSION_ID,$USER['user_id']);
@@ -64,4 +64,20 @@ if (isset($_POST['login'])) {
 
 if(isset($_GET['logout'])) {
     logout();
+}
+
+function sign_in(){
+    echo"<form method='POST' action=".$_SERVER['PHP_SELF'].">
+            <table>
+                <tr>
+                    <td>Login:</td><td><input type='text' name='user'></td>
+                </tr>
+                <tr>
+                    <td>Password:</td><td><input type='password' name='pass'></td>
+                </tr>
+                <tr>
+                    <td colspan='2'><input type='submit' name='login' value='Sign in'></td>
+                </tr>
+            </table>
+        </form>";
 }
