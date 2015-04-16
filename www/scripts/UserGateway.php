@@ -56,8 +56,9 @@ class UserGateway{
      *
      */
     function findUserById($user_id){
-        $result = mysql_query("SELECT session_id FROM `users` WHERE user_id = '$user_id';") or die(mysql_error());
-        return mysql_result($result,0);
+        $result = mysql_query("SELECT * FROM `users` WHERE user_id = '$user_id';") or die(mysql_error());
+        if($result == false) return false;
+        return true;
     }
 
 

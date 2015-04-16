@@ -20,7 +20,6 @@ function login($login,$password){
     $USER = $gateway->findUserByLoginAndPassword($login,$password);
     if(!empty($USER)) {
         $_SESSION = array_merge($_SESSION,$USER);
-        $gateway->updateSessionId(SESSION_ID,$USER['user_id']);
         return true;
     }else{
         return false;
@@ -29,8 +28,9 @@ function login($login,$password){
 
 function check_user($user_id) {
     $gateway = Tools::factory('UserGateway');
-    $session_id =$gateway->findUserById($user_id);
-    return $session_id==SESSION_ID ? true : false;
+    $result =$gateway->findUserById($user_id);
+
+    return $result;
 }
 
 if(isset($_SESSION['user_id'])) {
