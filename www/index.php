@@ -23,6 +23,9 @@ if(USER_LOGGED) {
     if(isset($_GET['type'])&&$_GET['type']=='delete'){
         $banners->delete_banner($_GET['id']);
     }
+    if(isset($_GET['type'])&&$_GET['type']=='change'){
+        $banners->update_status($_GET['id']);
+    }
 }
 else {
     sign_in();

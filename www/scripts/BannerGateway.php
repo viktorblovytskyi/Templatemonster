@@ -38,7 +38,7 @@ class BannerGateway {
      * Inputs:
      */
     function update_date($banner_id,$user_id,$date_of_start,$date_of_end){
-        $result = mysql_query("UPDATE `banners` SET `dateofstart`= '$date_of_start',`dateofend` = '$date_of_end' WHERE `banner_id` =  '$banner_id' AND `user_id` = '$user_id'")
+        $result = mysql_query("UPDATE `banners` SET `dateofstart`= '$date_of_start',`dateofend` = '$date_of_end' WHERE `id` =  '$banner_id' AND `user_id` = '$user_id'")
         or die(mysql_error());
     }
 
@@ -48,7 +48,7 @@ class BannerGateway {
      * Inputs:
      */
     function update_status($banner_id,$user_id,$status){
-        $result = mysql_query("UPDATE `banners` SET `status`= '$status'WHERE `banner_id` =  '$banner_id' AND `user_id` = '$user_id'")
+        $result = mysql_query("UPDATE `banners` SET `status`= '$status'WHERE `id` =  '$banner_id' AND `user_id` = '$user_id'")
         or die(mysql_error());
     }
 
@@ -70,7 +70,7 @@ class BannerGateway {
      */
     function update($banner_id,$user_id,$banner_name,$status,$width,$height,$date_of_start,$date_of_end, $content){
         $result = mysql_query("UPDATE `banners` SET `name` = '$banner_name', `status`= '$status',`width`='$width',`height`='$height',`dateofstart`='$date_of_start',`dateofend`='$date_of_end', `content`='$content'
-        WHERE `banner_id` =  '$banner_id' AND `user_id` = '$user_id'") or die(mysql_error());
+        WHERE `id` =  '$banner_id' AND `user_id` = '$user_id'") or die(mysql_error());
     }
 
     /*
@@ -79,15 +79,15 @@ class BannerGateway {
      * Inputs:
      */
     function find_by_name($name,$user_id){
-        $result = mysql_query("SELECT banner_id FROM banners WHERE `name` = '$name' AND `user_id` = '$user_id'") or die(mysql_error());
+        $result = mysql_query("SELECT id FROM banners WHERE `name` = '$name' AND `user_id` = '$user_id'") or die(mysql_error());
         return $result;
     }
-    function select_banner($id){
-        $result = mysql_query("SELECT * FROM `banners` WHERE banner_id = $id") or die(mysql_error());
+    function select_banner($id,$user_id){
+        $result = mysql_query("SELECT * FROM `banners` WHERE id = $id AND user_id = $user_id") or die(mysql_error());
         return $result;
     }
     function delete($user_id,$banner_id){
-        $result = mysql_query("DELETE FROM `banners` WHERE user_id = $user_id AND banner_id = $banner_id") or die(mysql_error());
+        $result = mysql_query("DELETE FROM `banners` WHERE user_id = $user_id AND id = $banner_id") or die(mysql_error());
     }
 
 }

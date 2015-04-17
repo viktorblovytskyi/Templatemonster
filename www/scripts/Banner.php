@@ -155,7 +155,7 @@ class Banner {
             $this->create_banner();
         }elseif($array['button']=='update'){
             $this->setBannerName($array['banner_name']);
-            $this->banner_id=$array['banner_id'];
+            $this->banner_id=$array['id'];
             $this->setContent($array['content']);
             $this->setHeight($array['height']);
             $this->setWidth($array['width']);
@@ -186,7 +186,7 @@ class Banner {
     }
     public function loadData($banner_id){
         $gateway = Tools::factory("BannerGateway");
-        $result = mysql_fetch_array($gateway->select_banner($banner_id));
+        $result = mysql_fetch_array($gateway->select_banner($banner_id,$this->user_id));
         $this->banner_id=$banner_id;
         $this->setBannerName($result['name']);
         $this->setContent($result['content']);
@@ -199,49 +199,56 @@ class Banner {
     }
     private function  update_banner(){
         $gateway = Tools::factory("BannerGateway");
-        /*if(!isset($this->status)){
-            $this->status = false;
-        }else{
-            $this->status = true;
-        }*/
         $gateway->update($this->banner_id,$this->user_id,$this->banner_name,$this->status,$this->width,$this->height,$this->date_of_start,$this->date_of_end,$this->content);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
     function show_user_banners(){
         $gateway = Tools::factory("BannerGateway");
         $banners=$gateway->find_users_banner($this->user_id);
+
         echo " <table>
                 <tr>
-                <td>id</td>
                 <td>name</td>
-                <td>status</td>
                 <td>width</td>
                 <td>height</td>
                 <td>date of start</td>
                 <td>date of end</td>
+                <td>status</td>
                 <td></td></tr>";
         while($row=mysql_fetch_array($banners)){
             if(strnatcasecmp($row['status'],"1")==0){
-                $status='checked';
+                $status='on';
             }else{
-                $status="";
+                $status="off";
             }
-            echo "<tr><td><a href='?type=update&id=".$row['banner_id']."'>".$row['banner_id']."</a></td><td>". $row['name']." </td><td> <input type='checkbox' ".$status."> </td><td> ". $row['width']." </td><td>" . $row['height']. " </td><td>". $row['dateofstart']."</td><td>".$row['dateofend']."</td><td><a href='?type=delete&id=".$row['banner_id']."'>Delete</a></td></tr>";
+            echo "<tr><td><a href='?type=update&id=".$row['id']."'>". $row['name']."</a> </td><td> ". $row['width']." </td><td>" . $row['height']. " </td><td>". $row['dateofstart']."</td><td>".$row['dateofend']."</td><td><a href='?type=change&id=".$row['id']."'>  ".$status."</a> </td><td><a href='?type=delete&id=".$row['id']."'>Delete</a></td></tr>";
         }
         echo"</table>";
+
     }
     public function delete_banner($banner_id){
         $gateway = Tools::factory("BannerGateway");
         $gateway->delete($this->user_id,$banner_id);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
-
+    public function update_status($banner_id){
+        $gateway = Tools::factory("BannerGateway");
+        $result = mysql_fetch_array($gateway->select_banner($banner_id,$this->user_id));
+        if($result['status']=='1'){
+            $status=false;//izminenie na protivopolojnoe znachenie
+        }else{
+            $status = true;
+        }
+        $gateway->update_status($banner_id,$this->user_id,$status);
+        exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
+    }
     function show_form($query_type){
         if($this->status=='1'){
             $checked='checked';
         }elseif($this->status=='0'){
             $checked='';
         }
+
         echo '<table>
     <form name="create" action=index.php method="POST">
     <input type="hidden" name="banner_id" value="'.$this->banner_id.'">
