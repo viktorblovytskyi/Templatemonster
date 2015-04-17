@@ -161,7 +161,6 @@ class Banner {
             $this->setWidth($array['width']);
             $this->setDateOfStart($array['date_of_start']);
             $this->setDateOfEnd($array['date_of_end']);
-            $this->setStatus($array['status']);
             if(strnatcasecmp($array['status'],'on')==0){
                 $this->setStatus(true);
             }else{
@@ -196,17 +195,15 @@ class Banner {
         $this->setDateOfStart($result['dateofstart']);
         $this->setDateOfEnd($result['dateofend']);
         $this->setStatus($result['status']);
-        $this->print_data();
+
     }
     private function  update_banner(){
         $gateway = Tools::factory("BannerGateway");
-        if(!isset($this->status)){
+        /*if(!isset($this->status)){
             $this->status = false;
         }else{
             $this->status = true;
-        }
-        $this->print_data();
-        //$banner_id,$user_id,$banner_name,$status,$width,$height,$date_of_start,$date_of_end, $content
+        }*/
         $gateway->update($this->banner_id,$this->user_id,$this->banner_name,$this->status,$this->width,$this->height,$this->date_of_start,$this->date_of_end,$this->content);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
@@ -240,9 +237,10 @@ class Banner {
     }
 
     function show_form($query_type){
-        if($this->getStatus()==true){
-            $status = 'on';
+        if($this->status=='1'){
             $checked='checked';
+        }elseif($this->status=='0'){
+            $checked='';
         }
         echo '<table>
     <form name="create" action=index.php method="POST">
@@ -278,7 +276,7 @@ class Banner {
         </tr>
         <tr>
             <td>Status</td>
-            <td><input type="checkbox" name="status"'.$checked.' value="'.$status.'"></td>
+            <td><input type="checkbox" name="status" '.$checked.'></td>
             <td colspan="2"><input type="submit" name="button" value="'.$query_type.'"></td>
         </tr>
         <tr>
