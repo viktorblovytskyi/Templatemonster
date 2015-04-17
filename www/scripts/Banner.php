@@ -135,11 +135,13 @@ class Banner {
     {
         $this->status = $status;
     }
+
     public function print_data(){
         echo "$this->banner_id $this->user_id $this->banner_name $this->status $this->height $this->width $this->date_of_start $this->date_of_end $this->content";
     }
 
     public function select_function($array){
+        $tools = new Tools();
         if($array['button']=='create'){
             $this->setBannerName($array['banner_name']);
             $this->setContent($array['content']);
@@ -152,7 +154,13 @@ class Banner {
             }else{
                 $this->setStatus(false);
             }
-            $this->create_banner();
+            if($tools->check_banner($array)==true){
+                $this->create_banner();
+            }else{
+                $this->show_form('create');
+                echo 'Error!';
+            }
+
         }elseif($array['button']=='update'){
             $this->setBannerName($array['banner_name']);
             $this->banner_id=$array['id'];
@@ -166,7 +174,13 @@ class Banner {
             }else{
                 $this->setStatus(false);
             }
-            $this->update_banner();
+            if($tools->check_banner($array)==true){
+                $this->update_banner();
+            }else{
+                $this->show_form('update');
+                echo 'Error!';
+            }
+
         }
     }
 
@@ -176,14 +190,10 @@ class Banner {
             echo "Banner already exists";
             return 0;
         }
-       if(!isset($this->status)){
-            $this->status = false;
-        }else{
-            $this->status = true;
-        }
         $gateway->insert($this->user_id,$this->banner_name,$this->status,$this->width,$this->height,$this->date_of_start,$this->date_of_end,$this->content);//***************************************
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
+
     public function loadData($banner_id){
         $gateway = Tools::factory("BannerGateway");
         $result = mysql_fetch_array($gateway->select_banner($banner_id,$this->user_id));
@@ -197,11 +207,13 @@ class Banner {
         $this->setStatus($result['status']);
 
     }
+
     private function  update_banner(){
         $gateway = Tools::factory("BannerGateway");
         $gateway->update($this->banner_id,$this->user_id,$this->banner_name,$this->status,$this->width,$this->height,$this->date_of_start,$this->date_of_end,$this->content);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
+
     function show_user_banners(){
         $gateway = Tools::factory("BannerGateway");
         $banners=$gateway->find_users_banner($this->user_id);
@@ -226,11 +238,13 @@ class Banner {
         echo"</table>";
 
     }
+
     public function delete_banner($banner_id){
         $gateway = Tools::factory("BannerGateway");
         $gateway->delete($this->user_id,$banner_id);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
+
     public function update_status($banner_id){
         $gateway = Tools::factory("BannerGateway");
         $result = mysql_fetch_array($gateway->select_banner($banner_id,$this->user_id));
@@ -242,16 +256,16 @@ class Banner {
         $gateway->update_status($banner_id,$this->user_id,$status);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
+
     function show_form($query_type){
         if($this->status=='1'){
             $checked='checked';
         }elseif($this->status=='0'){
             $checked='';
         }
-
         echo '<table>
     <form name="create" action=index.php method="POST">
-    <input type="hidden" name="banner_id" value="'.$this->banner_id.'">
+    <input type="hidden" name="id" value="'.$this->banner_id.'">
         <tr>
             <td colspan="1">Name</td>
             <td colspan="3"><input size="20" type=text name="banner_name" value="'.$this->getBannerName().'"></td>

@@ -69,7 +69,7 @@ class BannerGateway {
      * Inputs:
      */
     function update($banner_id,$user_id,$banner_name,$status,$width,$height,$date_of_start,$date_of_end, $content){
-        $result = mysql_query("UPDATE `banners` SET `name` = '$banner_name', `status`= '$status',`width`='$width',`height`='$height',`dateofstart`='$date_of_start',`dateofend`='$date_of_end', `content`='$content'
+        $result = mysql_query("UPDATE `banners` SET `name` = '$banner_name', `status`= '$status' ,`width`='$width',`height`='$height',`dateofstart`='$date_of_start',`dateofend`='$date_of_end', `content`='$content'
         WHERE `id` =  '$banner_id' AND `user_id` = '$user_id'") or die(mysql_error());
     }
 

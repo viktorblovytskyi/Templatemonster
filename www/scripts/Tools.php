@@ -87,51 +87,20 @@ class Tools {
     }
 
     /*
-     * check_banner_name($data)
+     * check_banner($data)
      * This function verifies banner name.
      *
      */
-    function check_banner_name($data){
-        //*******************
-    }
-
-    /*
-     * write_in_file($banner_name,$content)
-     * This function creates a file and writes the data in html file.
-     * The file name consists of a unique user's id and the name of the banner.
-     * banners/".$user_id."_".$banner_name.".html
-     * Inputs:
-     *      $banner_name - String;
-     *      $content - String;
-     * Output:
-     *      void function
-     */
-    function write_in_file($banner_name,$content){
-        $user_id=$_SESSION['user_id'];
-        $fp = fopen("banners/".$user_id."_".$banner_name.".html",'wt');
-        $result = fwrite($fp,$content);
-    }
-
-    /*
-     * reading_from_file($banner_name)
-     * This function  reads data from html files.
-     * The file name consists of a unique user' id and the name of the banner.
-     * banners/".$user_id."_".$banner_name.".html
-     * Inputs:
-     *      $banner_name - String;
-     * Outputs:
-     *      $content - returns the file in an array.
-     *      if file not found - return 0
-     */
-    function reading_from_file($banner_name){
-        $user_id=$_SESSION['user_id'];
-        $content = file("banners/".$user_id."_".$banner_name.".html");
-        if($content){
-            return $content;
+    function check_banner($data){
+        if(preg_match('/^[a-zA-Z0-9_-]{6,32}$/i',$data['banner_name']) && preg_match('/^[0-9]{1,32}$/i',$data['height']) && preg_match('/^[0-9]{1,32}$/i',$data['width']) && preg_match('/\d{4}\-\d{2}\-\d{2}/i',$data['date_of_start']) && preg_match('/\d{4}\-\d{2}\-\d{2}/i',$data['date_of_end']) && preg_match('/\d{4}\-\d{2}\-\d{2}/i',$data['date_of_start'])){
+            return true;
         }else{
-            echo "Read ERROR!";
-            return 0;
+            return false;
         }
     }
+
+
+
+
 
 }
