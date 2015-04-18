@@ -233,7 +233,7 @@ class Banner {
             }else{
                 $status="off";
             }
-            echo "<tr><td><a href='?type=update&id=".$row['id']."'>". $row['name']."</a> </td><td> ". $row['width']." </td><td>" . $row['height']. " </td><td>". $row['dateofstart']."</td><td>".$row['dateofend']."</td><td><a href='?type=change&id=".$row['id']."'>  ".$status."</a> </td><td><a href='?type=delete&id=".$row['id']."'>Delete</a></td></tr>";
+            echo "<tr><td><a href='?type=update&id=".$row['id']."'>". $row['name']."</a> </td><td> ". $row['width']." </td><td>" . $row['height']. " </td><td>". $row['dateofstart']."</td><td>".$row['dateofend']."</td><td><a href='?type=change&id=".$row['id']."'>  ".$status."</a> </td><td><a href='?type=delete&id=".$row['id']."'>Delete</a></td><td><a href='?type=add_page&id=".$row['id']."'>Add page</a></td><td><a href='?type=pages&id=".$row['id']."'>Pages</a></td></tr>";
         }
         echo"</table>";
 
