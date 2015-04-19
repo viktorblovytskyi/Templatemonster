@@ -5,6 +5,8 @@
  * Date: 04.04.2015
  * Time: 16:53
  *
+ * Class Tools:
+ *
  * Methods:
  *      factory($type);
  *      connect($host,$login,$password,$database);
@@ -89,9 +91,14 @@ class Tools {
     /*
      * check_banner($data)
      * This function verifies banner name.
+     * Input:
+     *      $data = Array
+     * Output:
+     *      Boolean result
      *
      */
     function check_banner($data){
+        //ispravit' regularku dlya date dobavit' sravnenie datu
         if(preg_match('/^[a-zA-Z0-9_-]{6,32}$/i',$data['banner_name']) && preg_match('/^[0-9]{1,32}$/i',$data['height']) && preg_match('/^[0-9]{1,32}$/i',$data['width']) && preg_match('/\d{4}\-\d{2}\-\d{2}/i',$data['date_of_start']) && preg_match('/\d{4}\-\d{2}\-\d{2}/i',$data['date_of_end']) && preg_match('/\d{4}\-\d{2}\-\d{2}/i',$data['date_of_start'])){
             return true;
         }else{

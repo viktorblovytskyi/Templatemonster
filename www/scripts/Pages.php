@@ -1,16 +1,32 @@
-x<?php
+<?php
 /**
  * Created by PhpStorm.
  * User: Leito
  * Date: 18.04.2015
  * Time: 2:28
+ *
+ * Class Pages:
+ *
+ * Properties:
+ *      $banner_id = int;
+ * Methods:
+ *      show_form();
+ *      add_page($link);
+ *      show_page();
+ *      delete_page($id);
+ *
  */
 
 class Pages {
     private $banner_id;
+
     function __construct($banner_id){
         $this->banner_id=$banner_id;
     }
+
+    /*
+     * This function displays a form to add links.
+     */
     function show_form(){
         echo '<form name="page" action="index.php" method="POST">
                 <input type="hidden" name="id" value="'.$this->banner_id.'">
@@ -19,10 +35,20 @@ class Pages {
             </form>
             <a href="index.php">Close</a>';
     }
+
+    /*
+     * This function adds new link in data.
+     * Inputs:
+     *      $link - String
+     */
     function add_page($link){
         $gateway = Tools::factory("PagesGateway");
         $gateway->insert($this->banner_id,$link);
     }
+
+    /*
+     * This function displays all the links which displays banner.
+     */
     function show_pages(){
         $gateway = Tools::factory("PagesGateway");
         $pages=$gateway->select($this->banner_id);
@@ -36,6 +62,12 @@ class Pages {
         }
         echo"</table><br><a href='index.php'>Close</a>";
     }
+
+    /*
+     * This function delete link fro database.
+     * Inputs:
+     *      $id - int.
+     */
     function delete_page($id){
         $gateway = Tools::factory("PagesGateway");
         $gateway->delete($id);

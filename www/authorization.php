@@ -2,12 +2,21 @@
 include("scripts/Tools.php");
 
 define('SESSION_ID',session_id());
-
+/*
+ * This function closes session and user logoff.
+ */
 function logout() {
     unset($_SESSION['user_id']);
     die(header('Location: '.$_SERVER['PHP_SELF']));
 }
 
+
+/*
+ * This function starts session if user's login and password checked.
+ * Input:
+ *      $login - String
+ *      $password - String
+ */
 function login($login,$password){
     $gateway = Tools::factory('UserGateway');
     $tools = new Tools();
@@ -29,7 +38,6 @@ function login($login,$password){
 function check_user($user_id) {
     $gateway = Tools::factory('UserGateway');
     $result =$gateway->findUserById($user_id);
-
     return $result;
 }
 
@@ -45,7 +53,6 @@ else {
 
 
 if (isset($_POST['login'])) {
-
     if(get_magic_quotes_gpc()) {
         $_POST['user']=stripslashes($_POST['user']);
         $_POST['pass']=stripslashes($_POST['pass']);
@@ -61,11 +68,16 @@ if (isset($_POST['login'])) {
     }
 
 }
-
+/*
+ * Call function logout()
+ */
 if(isset($_GET['logout'])) {
     logout();
 }
 
+/*
+ * This function shows authorization's form.
+ */
 function sign_in(){
     echo"<form method='POST' action=".$_SERVER['PHP_SELF'].">
             <table>

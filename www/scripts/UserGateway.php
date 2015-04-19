@@ -4,6 +4,9 @@
  * User: Leito
  * Date: 28.03.2015
  * Time: 0:32
+ *
+ * Class UserGateway:
+ *
  * Pattern Data Gateway
  * Methods:
  *      updateSessionId($session_id,$user_id);

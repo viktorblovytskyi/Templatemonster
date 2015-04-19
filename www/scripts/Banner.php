@@ -5,8 +5,32 @@ session_start();
  * User: Leito
  * Date: 05.04.2015
  * Time: 21:00
+ *
+ * Class Banner:
+ *
+ * Properties:
+ *      $user_id = int
+ *      $banner_name = String
+ *      $width = int
+ *      $height = int
+ *      $content = String
+ *      $date_of_start = String
+ *      $date_of_end = String
+ *      $status = Boolean
+ *      $banner_id = int
+ *
+ * Methods:
+ *      select_function($array);
+ *      create_banner();
+ *      update_banner();
+ *      loadData($banner_id);
+ *      show_user_banners();
+ *      delete_banner($banner_id);
+ *      show_form();
+ *      update_banner_status($banner_id);
+ *      Get and set methods
  */
-//include('scripts/Tools.php');
+
 class Banner {
     private $user_id;
     private $banner_name;
@@ -135,11 +159,15 @@ class Banner {
     {
         $this->status = $status;
     }
-
+    //delete before commit;***************************************************************************************************************************************
     public function print_data(){
         echo "$this->banner_id $this->user_id $this->banner_name $this->status $this->height $this->width $this->date_of_start $this->date_of_end $this->content";
     }
-
+    /*
+     * This function processes the received data and selects a method for processing query;
+     * Inputs:
+     *      $array = Array;
+     */
     public function select_function($array){
         $tools = new Tools();
         if($array['button']=='create'){
@@ -160,7 +188,6 @@ class Banner {
                 $this->show_form('create');
                 echo 'Error!';
             }
-
         }elseif($array['button']=='update'){
             $this->setBannerName($array['banner_name']);
             $this->banner_id=$array['id'];
@@ -184,9 +211,13 @@ class Banner {
         }
     }
 
+    /*
+     * This function adds banner in database;
+     */
     private function create_banner(){
         $gateway = Tools::factory("BannerGateway");
-        if(mysql_fetch_array($gateway->find_by_name($this->banner_name,$this->user_id))>=1){//пропускает баннеры с одинаковыми именами****************
+        //check for the presence of a banner with the same name in the database
+        if(mysql_fetch_array($gateway->find_by_name($this->banner_name,$this->user_id))>=1){
             echo "Banner already exists";
             return 0;
         }
@@ -194,6 +225,11 @@ class Banner {
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
 
+    /*
+     * This function loads information from database.
+     * Inputs:
+     *      $banner_id = int;
+     */
     public function loadData($banner_id){
         $gateway = Tools::factory("BannerGateway");
         $result = mysql_fetch_array($gateway->select_banner($banner_id,$this->user_id));
@@ -208,12 +244,18 @@ class Banner {
 
     }
 
+    /*
+     *  This function update banner's information in database.
+     */
     private function  update_banner(){
         $gateway = Tools::factory("BannerGateway");
         $gateway->update($this->banner_id,$this->user_id,$this->banner_name,$this->status,$this->width,$this->height,$this->date_of_start,$this->date_of_end,$this->content);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
 
+    /*
+     * This function displays all user's banners.
+     */
     function show_user_banners(){
         $gateway = Tools::factory("BannerGateway");
         $banners=$gateway->find_users_banner($this->user_id);
@@ -239,17 +281,30 @@ class Banner {
 
     }
 
+    /*
+     * This function delete banner from database.
+     * Inputs:
+     *      $banner_id = int
+     */
     public function delete_banner($banner_id){
         $gateway = Tools::factory("BannerGateway");
         $gateway->delete($this->user_id,$banner_id);
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
 
+    /*
+     * This function update banner's status.
+     * First function gets the current status and then change it to the opposite.
+     * Inputs:
+     *      $banner_id = int
+     */
     public function update_status($banner_id){
         $gateway = Tools::factory("BannerGateway");
+        //Get the status of a banner
         $result = mysql_fetch_array($gateway->select_banner($banner_id,$this->user_id));
+        //Change the status reversed value
         if($result['status']=='1'){
-            $status=false;//izminenie na protivopolojnoe znachenie
+            $status=false;
         }else{
             $status = true;
         }
@@ -257,6 +312,9 @@ class Banner {
         exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
 
+    /*
+     * This function displays form for create and update banner.
+     */
     function show_form($query_type){
         if($this->status=='1'){
             $checked='checked';
