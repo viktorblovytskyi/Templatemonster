@@ -9,6 +9,7 @@ session_start();
  * Class Banner:
  *
  * Properties:
+ *  private:
  *      $user_id = int
  *      $banner_name = String
  *      $width = int
@@ -24,6 +25,8 @@ session_start();
  *      create_banner();
  *      update_banner();
  *      loadData($banner_id);
+ *      find_banner();
+ *      display_banner($content,$height,$width)
  *      show_user_banners();
  *      delete_banner($banner_id);
  *      show_form();
@@ -159,10 +162,7 @@ class Banner {
     {
         $this->status = $status;
     }
-    //delete before commit;***************************************************************************************************************************************
-    public function print_data(){
-        echo "$this->banner_id $this->user_id $this->banner_name $this->status $this->height $this->width $this->date_of_start $this->date_of_end $this->content";
-    }
+
     /*
      * This function processes the received data and selects a method for processing query;
      * Inputs:
@@ -279,6 +279,46 @@ class Banner {
         }
         echo"</table>";
 
+    }
+
+    /*
+     * This function find banners in database and display banners on the page.
+     * Uses method display_banner($content, $height, $width);
+     */
+    public function find_banner(){
+        //Gets server's date in format "YEAR-MONTH-DAY" "2013-03-12"
+        $date = date("o-m-d");
+        $gateway = Tools::factory("BannerGateway");
+        $banners = $gateway->find_users_banner_on($this->user_id);
+        $parsed=array();
+        while($row=mysql_fetch_array($banners)){
+            $check_date=($row['dateofstart']<=$date and $row['dateofend']>=$date);
+            if($check_date == true){
+                $parsed[] = $row;
+            }
+        }
+        if(count($parsed)>=1){
+            $i= rand(0, count($parsed)-1);
+            $this->display_banner($parsed[$i]['content'],$parsed[$i]['height'],$parsed[$i]['width']);
+        }elseif(count($parsed)==0){
+            echo "";
+        }else{
+            $i=0;
+            $this->display_banner($parsed[$i]['content'],$parsed[$i]['height'],$parsed[$i]['width']);
+        }
+    }
+
+    /*
+     * This function display banners on the page in <iframe>.
+     * Inputs:
+     *      $content = String
+     *      $height = int
+     *      $width = int
+     */
+    function display_banner($content,$width,$height){
+        echo '<iframe src="show_content.php?content='.$content.'" width="'.$width.'" height="'.$height.'" scrolling="no">
+                    Ваш браузер не поддерживает плавающие фреймы!
+            </iframe><br>';
     }
 
     /*

@@ -1,8 +1,30 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <title></title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="wrapper">
+
+    <header class="header">
+
+    </header><!-- .header-->
+    <div class="container">
+        <main class="content">
+
+
 <?php
-session_start();
 include('authorization.php');
 include('scripts/Banner.php');
 include('scripts/Pages.php');
+
 // Verification of authorized users or not.
 if(USER_LOGGED) {
     if(!check_user($user_id)) logout();
@@ -12,7 +34,17 @@ if(USER_LOGGED) {
 
     $banners = new Banner($user_id);
     $banners->show_user_banners($user_id);
-    echo "<br>";
+
+    echo '<textarea contenteditable="true" rows="5" cols="75"><script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js" type="text/javascript"></script>
+            <script type="text/javascript">
+            //if you need to display more than one banner per page, you can add one more line with the new like #banner2.
+                $(document).ready(function(){
+                $("#banner").load("display_banner.php?user_id='.$user_id.'");})
+            </script>
+        <div id="banner"></div>
+        </textarea>';
+
+
     // Load data in form anf display update form.
     if(isset($_GET['id'])&&$_GET['type']=='update'){
         $banners->loadData($_GET['id']);
@@ -58,3 +90,17 @@ if(USER_LOGGED) {
     // Displays the authorization form.
     sign_in();
 }
+?>
+        </main><!-- .content -->
+    </div><!-- .container-->
+
+</div><!-- .middle-->
+
+</div><!-- .wrapper -->
+
+<footer class="footer">
+
+</footer><!-- .footer -->
+
+</body>
+</html>

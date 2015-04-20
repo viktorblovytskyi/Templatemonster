@@ -37,6 +37,19 @@ class BannerGateway {
     }
 
     /*
+     * find_users_banner($user_id)
+     * This function fetches banner with status true from the database.
+     * Table:
+     *      banners
+     * Inputs:
+     *      $user_id = int;
+     */
+    function find_users_banner_on($user_id){
+        $result = mysql_query("SELECT * FROM `banners` WHERE user_id = $user_id AND  status = TRUE");
+        return $result;
+    }
+
+    /*
      * update_date($banner_id,$user_id,$date_of_start,$date_of_end);
      * This function updates the data in the database.
      * Table:
