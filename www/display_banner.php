@@ -9,7 +9,7 @@ include("scripts/Tools.php");
 include('scripts/Banner.php');
 
 $banner = new Banner($_GET['user_id']);
-$banner->find_banner();
+$banner->find_banner($_GET['url']);
 
 
 

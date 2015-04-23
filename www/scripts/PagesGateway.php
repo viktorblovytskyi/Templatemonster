@@ -59,7 +59,7 @@ class PagesGateway {
     function update_visits($id){
         $result = mysql_query("SELECT visits FROM `pages` WHERE  id = $id") or die(mysql_error());
         $visits = mysql_fetch_array($result);
-        $updated_visits = $visits['visits']++;
+        $updated_visits = $visits['visits'] +1;
         $result = mysql_query("UPDATE `pages` SET visits = ".$updated_visits." WHERE id = $id") or die(mysql_error());
     }
 

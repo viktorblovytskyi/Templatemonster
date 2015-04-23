@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 /**
  * Created by PhpStorm.
  * User: Leito
@@ -281,20 +282,27 @@ class Banner {
 
     }
 
+
     /*
      * This function find banners in database and display banners on the page.
      * Uses method display_banner($content, $height, $width);
      */
-    public function find_banner(){
+    public function find_banner($url){
         //Gets server's date in format "YEAR-MONTH-DAY" "2013-03-12"
+        include_once("Pages.php");
         $date = date("o-m-d");
         $gateway = Tools::factory("BannerGateway");
         $banners = $gateway->find_users_banner_on($this->user_id);
         $parsed=array();
         while($row=mysql_fetch_array($banners)){
             $check_date=($row['dateofstart']<=$date and $row['dateofend']>=$date);
+            $pages = new Pages($row['id']);
             if($check_date == true){
-                $parsed[] = $row;
+                if($pages->find_pages($url)==1){
+                    $parsed[] = $row;
+                }elseif($pages->find_pages($url)==0){
+                    $parsed[] = $row;
+                }
             }
         }
         if(count($parsed)>=1){

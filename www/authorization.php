@@ -7,7 +7,7 @@ define('SESSION_ID',session_id());
  */
 function logout() {
     unset($_SESSION['user_id']);
-    die(header('Location: '.$_SERVER['PHP_SELF']));
+    exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
 }
 
 
@@ -60,11 +60,11 @@ if (isset($_POST['login'])) {
     $user = mysql_real_escape_string($_POST['user']);
     $pass = mysql_real_escape_string($_POST['pass']);
     if(login($user,$pass)) {
-        header('Refresh: 1');
-        die('Вы успешно авторизировались!');
+        echo 'Вы успешно авторизировались!';
+        exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }else {
-        header('Refresh: 3;');
-        die('Пароль неправильный!');
+        echo 'Пароль неправильный!';
+        exit("<meta http-equiv='refresh' content='0; url= $_SERVER[PHP_SELF]'>");
     }
 
 }

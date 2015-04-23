@@ -72,4 +72,24 @@ class Pages {
         $gateway = Tools::factory("PagesGateway");
         $gateway->delete($id);
     }
+
+    function find_pages($url){
+        $gateway = Tools::factory("PagesGateway");
+        $pages=$gateway->select($this->banner_id);
+        while($row=mysql_fetch_array($pages)){
+            $parsed[] = $row;
+        }
+        for($i=0;$i<=count($parsed);$i++){
+            if(count($parsed)>=1){
+                if($this->banner_id==$parsed[$i]['banner_id']&&$url==$parsed[$i]['link']){
+                    $gateway->update_visits($parsed[$i]['id']);
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }else{
+                return 0;
+            }
+        }
+    }
 }
